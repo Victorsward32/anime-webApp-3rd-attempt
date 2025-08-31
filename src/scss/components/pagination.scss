@@ -1,0 +1,51 @@
+@use "../abstracts" as *;
+
+[data-component="pagination"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem; // replaces margin-right inside .page
+  margin-top: 20px;
+  padding: 1rem;
+  flex-wrap: wrap;
+
+  .pagination-Btn,
+  .page {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 14px;
+  }
+
+  .pagination-Btn {
+    background-color: $dark_titleTxt;
+    color: white;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .page {
+    background-color: white;
+    color: $dark_titleTxt;
+
+    &.active {
+      background-color: $dark_secondary;
+      color: white;
+      font-weight: bold;
+    }
+
+    &:hover:not(.active) {
+      background-color: lighten($dark_secondary, 40%);
+    }
+  }
+  
+  .ellipsis {
+    color: #aaa;
+    padding: 0.5rem 1rem;
+  }
+}

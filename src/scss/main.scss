@@ -1,0 +1,3 @@
+@use './abstracts' as abs; // globallay available abstract folder and its files
+@use './base/global.scss';
+@use './base/reset.scss';

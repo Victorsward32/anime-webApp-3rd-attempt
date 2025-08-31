@@ -1,0 +1,71 @@
+@use '../abstracts' as *;
+
+[data-component="dotsNbtn-container"] {
+    @include display-center(row);
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 2rem;
+
+    .arrowBtnImg {
+        height: 30px;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+        
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+
+    .dots-container {
+        @include display-center(row);
+        gap: 0.5em;
+        z-index: 2;
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &.active-dot {
+                background-color: $dark_titleTxt;
+                transform: scale(1.2);
+            }
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.8);
+            }
+        }
+    }
+
+    @include mobile_devices() {
+        padding: 1em;
+        
+        .arrowBtnImg {
+            height: 20px;
+        }
+
+        .dots-container {
+            .dot {
+                width: 8px;
+                height: 8px;
+            }
+        }
+    }
+
+    @include tablet_devices() {
+        .arrowBtnImg {
+            height: 25px;
+        }
+
+        .dots-container {
+            .dot {
+                width: 10px;
+                height: 10px;
+            }
+        }
+    }
+}

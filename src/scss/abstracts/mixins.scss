@@ -1,0 +1,29 @@
+@use './variables.scss' as abs;
+
+@mixin display-center($direction) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin titleText() {
+    font-size: 2rem;
+    color: abs.$dark_titleTxt;
+    font-weight: 900;
+    line-height: 2rem;
+}
+
+// mixins for media query
+
+@mixin mobile_devices {
+    @media (max-width:600px) {
+        @content;
+    }
+}
+
+@mixin tablet_devices {
+    @media (max-width:900px) {
+        @content;
+    }
+}

@@ -1,0 +1,7 @@
+@use '../abstracts' as *;
+
+[data-component="bannerSlider"] {
+    @include display-center(column);
+    position: relative;
+    width: 100%;
+}

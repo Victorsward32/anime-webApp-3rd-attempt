@@ -1,0 +1,10 @@
+@use '../abstracts' as *;
+[data-component='homepage'] {
+    .slider-container {
+        padding: 1rem;
+    }
+    .cards-container{
+        margin: 1rem;
+        // @include display-center();
+    }
+}

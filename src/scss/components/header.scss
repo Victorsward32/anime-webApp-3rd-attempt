@@ -1,0 +1,212 @@
+@use '../abstracts' as *;
+
+[data-component='header'] {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+
+    .logo-contianer {
+        @include display-center('row');
+        overflow: hidden;
+
+        .web-title {
+            @include titleText() // font-size: 3rem
+        }
+    }
+
+    .link-container {
+        @include display-center('row');
+        gap: 1rem;
+
+        .nav-links {
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: normal;
+
+            &:hover {
+                text-decoration: underline;
+                text-decoration-color: $dark_titleTxt;
+                text-decoration-thickness: 0.3rem;
+            }
+        }
+    }
+
+    .search-bar-container {
+        @include display-center('row');
+        width: 30%;
+
+        .searchBar-Wrapper {
+            @include display-center('row');
+            background-color: rgba(128, 128, 128, 0.434);
+            padding: 0.3rem;
+            padding-left: 0.4rem;
+            width: 100%;
+
+            .search-Icon {
+                height: 24px;
+                width: 24px;
+                object-fit: fill;
+            }
+
+            .search-input {
+
+                padding: 0.4rem;
+                background-color: transparent;
+                outline: none;
+                width: 100%;
+                border: none;
+                overflow: hidden;
+
+            }
+
+            .search-input::placeholder {
+                color: grey;
+            }
+        }
+    }
+
+    .auth-container {
+        @include display-center('row');
+        gap: 1em;
+
+        & label {
+            font-size: 1rem;
+            line-height: normal;
+            font-weight: 500;
+
+
+        }
+
+        .signIN:hover {
+            color: $dark_white;
+            font-weight: 500;
+        }
+    }
+
+    .hamburger {
+        display: none !important;
+        max-width: 30px;
+        max-height: 30px;
+        @include display-center(row);
+        border: 0.4px solid white;
+        position: relative;
+    }
+
+    .header-mobile-menue {
+        position: absolute;
+        border: 1px solid white;
+        display: flex;
+        flex-direction: column;
+        height: 94%;
+        width: 60%;
+        top: 6%;
+        left: 0;
+        background-color: $dark_Primary;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        padding: 1rem;
+        z-index: 5;
+
+        .mobile-nav {
+            @include display-center(column);
+
+            .nav-links {
+                font-size: 1.4rem;
+                padding-left: 1.6rem;
+                // @include display-center(row);
+                width: 100%;
+                border-bottom: 1px solid rgba(128, 128, 128, 0.394);
+            }
+        }
+    }
+
+    @include mobile_devices() {
+        padding: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+
+        // justify-content: space-around;
+        .logo-contianer {
+            width: 100%;
+            // border: 1px solid;
+        }
+
+        .search-bar-container {
+            display: none;
+        }
+
+        .auth-container {
+            display: none;
+        }
+
+        .link-container {
+            display: none;
+        }
+
+        .hamburger {
+            @include display-center(row);
+            // left: 0px;
+            display: flex !important;
+
+        }
+
+        .mobile-auth-container {
+            font-size: 1.4rem;
+
+            // @include display-center(row);
+            width: 100%;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.394);
+            gap: 1rem;
+
+            .signIN {
+                text-align: left;
+            }
+        }
+    }
+
+    @include tablet_devices() {
+        padding: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+
+        // justify-content: space-around;
+        .logo-contianer {
+            width: 100%;
+            // border: 1px solid;
+        }
+
+        .search-bar-container {
+            // display: none;
+            width: 100%;
+        }
+
+        .auth-container {
+            display: none;
+        }
+
+        .link-container {
+            display: none;
+        }
+
+        .hamburger {
+            @include display-center(row);
+            // left: 0px;
+            display: flex !important;
+        }
+
+        .mobile-auth-container {
+            font-size: 1.4rem;
+
+            // @include display-center(row);
+            width: 100%;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.394);
+
+            .signIN {
+                text-align: left;
+            }
+        }
+    }
+
+}
