@@ -2,34 +2,52 @@ import React, { useEffect, useState } from "react";
 import AnimeCards from "../../components/cards/animeCard/AnimeCards";
 import "../../scss/layouts/animeCardsLayouts.scss";
 import Pagination from "../../components/pagination/Pagination";
+import useDebounce from "../../hooks/debounce/useDebounce";
 
-const AnimeCardsLayout = () => {
+const AnimeCardsLayout = ({ searchValue }) => {
   const [page, setPage] = useState(1);
   const [animeData, setAnimeData] = useState([]);
+  const [pagination, setPagination] = useState(null); // 🔹 store pagination info
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const debouceSearch = useDebounce(searchValue, 500);
+
   // 🔹 New states for filters
-  const [type, setType] = useState(""); // e.g., tv, movie, ova
-  const [filter, setFilter] = useState(""); // e.g., airing, upcoming, popularity, favorites
+  const [type, setType] = useState("");
+  const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    setPage(1); // reset page whenever search or filter changes
+  }, [debouceSearch, type, filter]);
 
   useEffect(() => {
     handleAPICall();
-  }, [page, type, filter]);
+  }, [page, type, filter, debouceSearch]);
 
   const handleAPICall = async () => {
     try {
       setIsLoading(true);
       setError(false);
 
-      // 🔹 Construct query params based on filter & type
-      let url = `https://api.jikan.moe/v4/top/anime?page=${page}`;
-      if (type) url += `&type=${type}`;
-      if (filter) url += `&filter=${filter}`;
+      let url = "";
+
+      if (debouceSearch) {
+        // 🔹 Search endpoint
+        url = `https://api.jikan.moe/v4/anime?q=${debouceSearch}&page=${page}`;
+        if (type) url += `&type=${type}`;
+         if (filter) url += `&filter=${filter}`;
+      } else {
+        // 🔹 Top anime endpoint
+        url = `https://api.jikan.moe/v4/top/anime?page=${page}`;
+        if (type) url += `&type=${type}`;
+        if (filter) url += `&filter=${filter}`;
+      }
 
       const res = await fetch(url);
       const result = await res.json();
       setAnimeData(result?.data || []);
+      setPagination(result?.pagination || null); // 🔹 store pagination from API
     } catch (error) {
       setError(true);
       console.error("Something went wrong while fetching data: - ", error);
@@ -52,13 +70,15 @@ const AnimeCardsLayout = () => {
           <option value="music">Music</option>
         </select>
 
-        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="">Filter</option>
-          <option value="airing">Airing</option>
-          <option value="upcoming">Upcoming</option>
-          <option value="bypopularity">Popularity</option>
-          <option value="favorite">Favorites</option>
-        </select>
+        {!debouceSearch && (
+          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+            <option value="">Filter</option>
+            <option value="airing">Airing</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="bypopularity">Popularity</option>
+            <option value="favorite">Favorites</option>
+          </select>
+        )}
       </div>
 
       <div className="anime-card-contianer">
@@ -75,13 +95,16 @@ const AnimeCardsLayout = () => {
           ))}
       </div>
 
-      {/* Hook Pagination to page */}
-      <Pagination
-        currentPage={page}
-        onPageChange={(newPage) => setPage(newPage)}
-      />
+      {/* Hook Pagination to API pagination */}
+      {pagination && (
+        <Pagination
+          currentPage={page}
+          totalCount={pagination.last_visible_page} // 🔹 dynamic total pages
+          onPageChange={(newPage) => setPage(newPage)}
+        />
+      )}
     </div>
   );
 };
 
-export default AnimeCardsLayout;
+export default React.memo(AnimeCardsLayout);

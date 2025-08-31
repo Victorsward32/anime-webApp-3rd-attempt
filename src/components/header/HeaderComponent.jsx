@@ -5,12 +5,13 @@ import searchIcon from '../../assets/icons/search.svg'
 import '../../scss/components/header.scss'
 
 
-const HeaderComponent = () => {
+const HeaderComponent = ({search}) => {
     const [searchValue, setSearchValue] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const handleSearch = (event) => {
         setSearchValue(event);
+        search(event);
     }
     return (
         <div data-component="header">

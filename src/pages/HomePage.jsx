@@ -7,14 +7,21 @@ import Pagination from '../components/pagination/Pagination';
 import AnimeCardsLayout from '../layouts/homeLayouts/animeCardsLayout';
 
 const HomePage = () => {
+    const [searchValue,setSearchValue]=useState("")
+    // console.log("searchValue:--->",searchValue)
     return (
         <div data-component='homepage'>
-            <HeaderComponent />
+            <HeaderComponent 
+                search={setSearchValue}
+
+            />
             <section className='slider-container'>
                 <SliderComponent />
             </section>
             <section className='cards-container' >
-            <AnimeCardsLayout/>
+            <AnimeCardsLayout 
+            searchValue={searchValue}
+            />
             </section>
 
         </div>
