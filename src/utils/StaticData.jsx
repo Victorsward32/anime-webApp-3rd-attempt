@@ -8,6 +8,8 @@ export const slideImagesArr = [
 
 ]
 
+export const fallbackImage= "https://cdn.pixabay.com/photo/2024/06/01/01/33/anime-8801333_1280.png"
+
 
 export const NavLink = [
     { name: "Home", href: "/" },

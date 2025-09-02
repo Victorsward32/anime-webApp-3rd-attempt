@@ -1,80 +1,148 @@
-import React, { useState, useEffect, } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../scss/components/sliderComponent.scss"
 import { slideImagesArr } from "../../utils/StaticData";
 import Slide from "./component/Slide.jsx";
 import DotsNButton from "./component/DotsNButton.jsx";
 
 const SliderComponent = () => {
-    const [imageSlides, setImageSlides] = useState([]);
-    const [activeIndex, setActiveIndex] = useState(0);
+    // State variables - component ki memory
+    const [allSlides, setAllSlides] = useState([]); // Sare images store karte hain
+    const [currentSlideNumber, setCurrentSlideNumber] = useState(0); // Abhi konsa slide active hai
+    
+    // Timer ka reference store karte hain
+    const autoSlideTimer = useRef(null);
 
-    // Set slides when component starts mounting
-    useEffect(() => {
-        setImageSlides(slideImagesArr);
+    // Auto slide start karne ka function
+    const startAutoSlide = () => {
+        // Agar pehle se timer chal raha hai to band kar dete hain
+        if (autoSlideTimer.current) {
+            clearInterval(autoSlideTimer.current);
+        }
         
-        // Auto slide timer - simple logic for fresher understanding
-        const autoSlideTimer = setInterval(() => {
-            setActiveIndex((currentIndex) => {
-                // If we are at last slide, go to first slide (0)
-                // Otherwise go to next slide
-                if (currentIndex === slideImagesArr.length - 1) {
+        // Naya timer start karte hain
+        autoSlideTimer.current = setInterval(() => {
+            setCurrentSlideNumber((previousSlide) => {
+                // Agar last slide pe hain to first slide pe chale jao
+                if (previousSlide === slideImagesArr.length - 1) {
                     return 0;
                 } else {
-                    return currentIndex + 1;
+                    // Warna next slide pe jao
+                    return previousSlide + 1;
                 }
             });
-        }, 5000); // Change slide every 5 seconds
+        }, 5000); // 5 second baad slide change hoga
+    };
 
-        // Cleanup function to clear timer when component unmounts
-        return () => {
-            clearInterval(autoSlideTimer);
+    // Auto slide stop karne ka function
+    const stopAutoSlide = () => {
+        if (autoSlideTimer.current) {
+            clearInterval(autoSlideTimer.current); // Timer band karte hain
+            autoSlideTimer.current = null; // Reference clear karte hain
         }
-    }, []);
+    };
 
-    // Function to go to previous slide
-    const handlePreviousClick = () => {
-        setActiveIndex((currentIndex) => {
-            // If we are at first slide (0), go to last slide
-            // Otherwise go to previous slide
-            if (currentIndex === 0) {
+    // Component load hone pe ye chalega
+    useEffect(() => {
+        console.log('Slider component loaded, setting up slides');
+        setAllSlides(slideImagesArr); // Images set karte hain
+        startAutoSlide(); // Auto slide start karte hain
+
+        // Component destroy hone pe timer clean up karte hain
+        return () => {
+            console.log('Slider component unmounting, cleaning up timer');
+            stopAutoSlide();
+        }
+    }, []); // Empty dependency array matlab sirf ek baar chalega
+
+    // Previous slide pe jane ka function
+    const goToPreviousSlide = () => {
+        console.log('Previous button clicked');
+        stopAutoSlide(); // User interaction pe auto slide band karte hain
+        
+        setCurrentSlideNumber((currentSlide) => {
+            // Agar first slide pe hain to last slide pe jao
+            if (currentSlide === 0) {
                 return slideImagesArr.length - 1;
             } else {
-                return currentIndex - 1;
+                // Warna previous slide pe jao
+                return currentSlide - 1;
             }
-        })
+        });
+        
+        // 5 second baad auto slide dobara start kar dete hain
+        setTimeout(() => {
+            startAutoSlide();
+        }, 5000);
     }
 
-    // Function to go to next slide
-    const handleNextClick = () => {
-        setActiveIndex((currentIndex) => {
-            // If we are at last slide, go to first slide (0)
-            // Otherwise go to next slide
-            if (currentIndex === slideImagesArr.length - 1) {
+    // Next slide pe jane ka function
+    const goToNextSlide = () => {
+        console.log('Next button clicked');
+        stopAutoSlide(); // User interaction pe auto slide band karte hain
+        
+        setCurrentSlideNumber((currentSlide) => {
+            // Agar last slide pe hain to first slide pe jao
+            if (currentSlide === slideImagesArr.length - 1) {
                 return 0;
             } else {
-                return currentIndex + 1;
+                // Warna next slide pe jao
+                return currentSlide + 1;
             }
-        })
+        });
+        
+        // 5 second baad auto slide dobara start kar dete hain
+        setTimeout(() => {
+            startAutoSlide();
+        }, 5000);
     }
 
-    // Function to go to specific slide when dot is clicked
-    const handleDotClick = (clickedIndex) => {
-        setActiveIndex(clickedIndex);
+    // Specific slide pe jane ka function (dot click pe)
+    const goToSpecificSlide = (slideIndex) => {
+        console.log('Dot clicked for slide:', slideIndex);
+        stopAutoSlide(); // User interaction pe auto slide band karte hain
+        setCurrentSlideNumber(slideIndex); // Direct slide pe chale jao
+        
+        // 5 second baad auto slide dobara start kar dete hain
+        setTimeout(() => {
+            startAutoSlide();
+        }, 5000);
     }
+
+    // Drag start hone pe ye function chalega
+    const handleUserDragStart = () => {
+        console.log('User started dragging');
+        stopAutoSlide(); // Drag start hone pe auto slide band kar dete hain
+    };
+
+    // Drag end hone aur slide change hone pe ye function chalega
+    const handleUserDragEnd = (newSlideIndex) => {
+        console.log('User finished dragging, new slide:', newSlideIndex);
+        setCurrentSlideNumber(newSlideIndex); // New slide set karte hain
+        
+        // 5 second baad auto slide dobara start kar dete hain
+        setTimeout(() => {
+            startAutoSlide();
+        }, 5000);
+    };
 
     return (
         <section data-component="bannerSlider">
+            {/* Slide component - main slider */}
             <Slide
                 slides={slideImagesArr}
-                activeIndex={activeIndex}
+                activeIndex={currentSlideNumber}
+                onDragStart={handleUserDragStart}
+                onDragEnd={handleUserDragEnd}
             />
+            
+            {/* Dots aur buttons component - navigation */}
             <DotsNButton
-                activeIndex={activeIndex}
+                activeIndex={currentSlideNumber}
                 slides={slideImagesArr}
-                onClick={handleDotClick}
+                onClick={goToSpecificSlide}
                 isDotVisible={true}
-                onClickLeft={handlePreviousClick}
-                onClickRight={handleNextClick}
+                onClickLeft={goToPreviousSlide}
+                onClickRight={goToNextSlide}
             />
         </section>
     );
