@@ -3,6 +3,7 @@ import AnimeCards from "../../components/cards/animeCard/AnimeCards";
 import "../../scss/layouts/animeCardsLayouts.scss";
 import Pagination from "../../components/pagination/Pagination";
 import useDebounce from "../../hooks/debounce/useDebounce";
+import DropDown from "../../components/dropDown/DropDown";
 
 const AnimeCardsLayout = ({ searchValue }) => {
   const [page, setPage] = useState(1);
@@ -58,6 +59,27 @@ const AnimeCardsLayout = ({ searchValue }) => {
 
   return (
     <div data-component="anime-card-layout">
+    <DropDown/>
+    <DropDown
+  data={['Apple', 'Banana', 'Orange']}
+  title="Pick a fruit"
+  onChange={(selected) => console.log(selected)} // selected = "Banana"
+ />
+
+
+    <DropDown
+  data={['apple', 'banana', 'orange']} // or object like { a: 'Apple', b: 'Banana' }
+  isMulti={true}
+  title="Select Fruits"
+  onChange={(selected) => console.log(selected)}
+/>
+<DropDown
+  data={{ a: 'Apple', b: 'Banana' }} // or object like { a: 'Apple', b: 'Banana' }
+  isMulti={true}
+  title="Select Fruits"
+   multiSelect={true}
+  onChange={(selected) => console.log(selected)}
+/>
       {/* 🔹 Filters */}
       <div className="filter-bar">
         <select value={type} onChange={(e) => setType(e.target.value)}>

@@ -1,0 +1,125 @@
+[data-component='drop-down'] {
+    position: relative;
+    width: 200px;
+    font-family: 'Segoe UI', sans-serif;
+
+    .parent-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: transparent;
+        border: 1px solid #e50957;
+        color: #e50957;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        width: 100%;
+        box-sizing: border-box;
+
+        .main-title {
+            font-size: 1rem;
+            font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+
+        img {
+            height: 12px;
+            width: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .up-image {
+            transform: rotate(180deg);
+        }
+
+        .down-image {
+            transform: rotate(0deg);
+        }
+    }
+
+    .child-container {
+        position: absolute;
+        top: 110%;
+        left: 0;
+        width: 100%;
+        background-color: #111;
+        border-radius: 0.5rem;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        box-sizing: border-box;
+
+        .dropdown-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            outline: none;
+            background-color: #222;
+            color: #fff;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #444;
+        }
+
+        .dropdown-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 200px;
+            overflow-y: auto;
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                color: #e50957;
+                cursor: pointer;
+                transition: background 0.2s;
+
+                &.selected {
+                    background-color: #e50957;
+                    color: white;
+                }
+
+                &:hover {
+                    background-color: #222;
+                }
+
+                &.disabled {
+                    color: #888;
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+
+    .dropdown-item {
+    padding: 0.75rem 1rem;
+    color: #e50957;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+
+    &.selected {
+        background-color: #e50957;
+        color: white;
+    }
+
+    &:hover {
+        background-color: #222;
+    }
+
+    .checkbox {
+        pointer-events: none;
+        accent-color: #e50957;
+    }
+
+    &.disabled {
+        color: #888;
+        pointer-events: none;
+    }
+}
+
+}
